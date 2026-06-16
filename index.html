@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgroSat — Crop Health & Irrigation Monitor</title>
+  <meta name="description" content="Satellite-powered crop health monitoring and irrigation advisory system using Sentinel-2 NDVI and Moisture data"/>
+  <meta name="theme-color" content="#1D9E75"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" href="icons/icon-192.png"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- Header -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-icon">🌾</span>
+    <div>
+      <h1>AgroSat Monitor</h1>
+      <p class="subtitle">Sentinel-2 · Maharashtra Region · Team Vikrama</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <select id="dateSelect" aria-label="Select date">
+      <option value="2026-03-29">Mar 29, 2026</option>
+      <option value="2026-04-28">Apr 28, 2026</option>
+      <option value="2026-05-28">May 28, 2026</option>
+      <option value="2026-06-02" selected>Jun 02, 2026</option>
+    </select>
+  </div>
+</header>
+
+<main>
+
+  <!-- Stat cards -->
+  <section class="stats-grid">
+    <div class="stat-card">
+      <p class="stat-label">Avg NDVI</p>
+      <p class="stat-value" id="statNdvi">—</p>
+      <p class="stat-sub">Vegetation Health</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Moisture Index</p>
+      <p class="stat-value" id="statMoisture">—</p>
+      <p class="stat-sub">Soil Wetness Proxy</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Healthy Fields</p>
+      <p class="stat-value green" id="statHealthy">—</p>
+      <p class="stat-sub">NDVI &gt; 0.5</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Stressed Fields</p>
+      <p class="stat-value red" id="statStressed">—</p>
+      <p class="stat-sub">NDVI 0 – 0.2</p>
+    </div>
+  </section>
+
+  <!-- Advisory banner -->
+  <section class="advisory-banner" id="advisoryBanner">
+    <span class="advisory-icon" id="advisoryIcon">⚠️</span>
+    <div>
+      <p class="advisory-label">Irrigation Advisory</p>
+      <p class="advisory-text" id="advisoryText">Loading...</p>
+    </div>
+  </section>
+
+  <!-- Maps row -->
+  <section class="cards-row">
+    <div class="card">
+      <p class="card-title">NDVI — Vegetation Health</p>
+      <img id="ndviMap" src="images/analysis_2026-06-02.png" alt="NDVI and moisture map" class="map-img"/>
+      <p class="map-caption">Green = healthy vegetation &nbsp;|&nbsp; Red = bare/stressed</p>
+    </div>
+    <div class="card">
+      <p class="card-title">NDVI + Moisture Trend (4 Dates)</p>
+      <img src="images/trend_ndvi_moisture.png" alt="NDVI and moisture trend chart" class="map-img"/>
+      <p class="map-caption">Green line = NDVI &nbsp;|&nbsp; Blue dashed = Moisture proxy</p>
+    </div>
+  </section>
+
+  <!-- Change map -->
+  <section class="card full-width">
+    <div class="card-header-row">
+      <p class="card-title">Vegetation Change Map (Mar 29 → Jun 02)</p>
+      <span class="badge">45.8% decreased &nbsp;·&nbsp; 19.8% increased</span>
+    </div>
+    <img src="images/ndvi_difference.png" alt="Vegetation change map" class="map-img"/>
+    <p class="map-caption">Green = vegetation increased &nbsp;|&nbsp; Red = vegetation decreased</p>
+  </section>
+
+  <!-- Advisory table -->
+  <section class="card full-width">
+    <p class="card-title">Full Advisory Summary — All Dates</p>
+    <img src="images/advisory_table.png" alt="Advisory summary for all dates" class="map-img"/>
+  </section>
+
+  <!-- About section -->
+  <section class="card full-width about-card">
+    <p class="card-title">About This Project</p>
+    <div class="about-grid">
+      <div class="about-item">
+        <span class="about-icon">🛰️</span>
+        <div>
+          <p class="about-heading">Data Source</p>
+          <p class="about-body">Sentinel-2 L2A satellite imagery (ESA Copernicus). Bands B04 (Red) and B08 (NIR) downloaded for 4 dates: Mar 29, Apr 28, May 28, Jun 02 2026.</p>
+        </div>
+      </div>
+      <div class="about-item">
+        <span class="about-icon">🧮</span>
+        <div>
+          <p class="about-heading">Methodology</p>
+          <p class="about-body">NDVI = (NIR−Red)/(NIR+Red) for vegetation health. Moisture Stress Index (MSI = Red/NIR) inverted as soil wetness proxy. Advisory logic combines both indices with growth-stage thresholds.</p>
+        </div>
+      </div>
+      <div class="about-item">
+        <span class="about-icon">💡</span>
+        <div>
+          <p class="about-heading">Irrigation Advisory Logic</p>
+          <p class="about-body">NDVI &lt; 0.25 + Moisture &lt; 0.35 → Critical. NDVI &lt; 0.35 + Moisture &lt; 0.42 → Moderate stress. NDVI ≥ 0.35 + Moisture ≥ 0.42 → Healthy. Else → Watch.</p>
+        </div>
+      </div>
+      <div class="about-item">
+        <span class="about-icon">👥</span>
+        <div>
+          <p class="about-heading">Team Vikrama</p>
+          <p class="about-body">Sanjivani College of Engineering, Kopargaon. Built for Agribusiness Hackathon 2026 (SPPU Research Park Foundation) and ISRO BAH 2026.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Team Vikrama &nbsp;·&nbsp; Sanjivani College of Engineering &nbsp;·&nbsp; Data: Copernicus Sentinel-2 L2A &nbsp;·&nbsp; 2026</p>
+</footer>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
